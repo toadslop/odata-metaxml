@@ -2,7 +2,6 @@ const { create, fragment } = require('xmlbuilder2');
 const pgStructure = require('pg-structure').default;
 fs = require('fs');
 
-let obj = {}
 const namespace = "ZWORKREPORT_ODATA_SRV"
 const doc = create().ele("xmlns:edmx").att(
   {
@@ -27,10 +26,29 @@ pgStructure({ database: "mydb", user: "toadslop", password: "newPassword" }, { i
     if (table.name === "migrations") {
       return;
     }
-    const entity = fragment().ele("EntityType").att({ name: table.name, "sap:content-version": "1" }).up()
+    const entity = fragment().ele("EntityType").att({ name: table.name, "sap:content-version": "1" })
     table.primaryKey.columns.forEach((column) => {
       const key = fragment().ele("key").ele("PropertRef").att({ Name: column.name }).up();
       entity.import(key);
+    })
+    table.columns.forEach((column) => {
+      console.log(column)
+      const attributes = {
+        Name: column.name,
+        Type: toEdmType(column.type.internalName),
+        Nullable: !column.notNull,
+        "sap:unicode": false,
+        "sap:label": column.comment || column.name,
+        "sap:creatable": false,
+        "sap:updatable": false,
+        "sap:sortable": false,
+        "sap:filterable": false
+      }
+      if (column.length) {
+        attributes["MaxLength"] = column.length
+      }
+      const property = fragment().ele("Property").att(attributes).up()
+      entity.import(property)
     })
     scheme.import(entity);
   })
@@ -41,7 +59,52 @@ pgStructure({ database: "mydb", user: "toadslop", password: "newPassword" }, { i
   console.log(xml);
 })
 
-
+const toEdmType = (sPgDatatype) => {
+  switch (sPgDatatype.toLowerCase()) {
+    case "bigint":
+      return "Edm.Int64"
+    case "binary":
+      return "Edm.Binary"
+    case "bit":
+      return "Edm.Boolean"
+    case "boolean":
+      return "Edm.Boolean"
+    case "char":
+      return "Edm.String"
+    case "date":
+      return "Edm.Date"
+    case "decimal":
+      return "Edm.Decimal"
+    case "double":
+      return "Edm.Double"
+    case "float":
+      return "Edm.Double"
+    case "integer":
+      return "Edm.Int32"
+    case "int4":
+      return "Edm.Int32"
+    case "longvarbinary":
+      return "Edm.Binary"
+    case "longvarchar":
+      return "Edm.String"
+    case "real":
+      return "EdmSingle"
+    case "smallint":
+      return "Edm.Int16"
+    case "time":
+      return "Edm.TimeOfDay"
+    case "timestamp":
+      return "Edm.DateTimeOffset"
+    case "tinyint":
+      return "Edm.Byte"
+    case "varbinary":
+      return "Edm.Binary"
+    case "varchar":
+      return "Edm.String"
+    default:
+      throw new Error(`Datatype ${sPgDatatype} is not a valid Postgres Datatype`)
+  }
+}
 // fs.writeFile("metadata.xml", doc)
 
 const xmlStr = `
