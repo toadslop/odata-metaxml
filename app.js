@@ -1,7 +1,6 @@
-const { Client } = require('pg')
-const client = new Client()
-client.connect()
-client.query('SELECT $1::text as message', ['Hello world!'], (err, res) => {
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-  client.end()
+const pgStructure = require('pg-structure').default;
+
+pgStructure({ database: "mydb", user: "toadslop", password: "newPassword" }, { includeSchemas: ["public"] }).then(db => {
+  const schemas = db.schemas;
+  console.log(db.get("users"))
 })

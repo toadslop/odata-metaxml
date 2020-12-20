@@ -4,6 +4,7 @@
     "driver": "pg",
     "user": "toadslop",
     "password": "newPassword",
-    "ssl": { "rejectUnauthorized": false}
+    "ssl": { "rejectUnauthorized": false},
+    "database": "mydb"
   }
 }

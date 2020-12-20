@@ -4,7 +4,8 @@
   "description": "Generates an odata metadata xml document for odata service generation",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "buildxml": "node buildXML"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
   "dependencies": {
     "db-migrate": "^0.11.11",
     "db-migrate-pg": "^1.2.2",
-    "pg": "~8.2.1"
+    "pg": "~8.2.1",
+    "pg-structure": "^7.2.6",
+    "xmlbuilder2": "^2.4.0"
   }
 }
