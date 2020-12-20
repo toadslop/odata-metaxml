@@ -1,0 +1,9 @@
+{
+  "defaultEnv": "dev",
+  "dev": {
+    "driver": "pg",
+    "user": "toadslop",
+    "password": "newPassword",
+    "ssl": { "rejectUnauthorized": false}
+  }
+}

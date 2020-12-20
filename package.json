@@ -1,0 +1,27 @@
+{
+  "name": "odata-metaxml",
+  "version": "1.0.0",
+  "description": "Generates an odata metadata xml document for odata service generation",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toadslop/odata-metaxml.git"
+  },
+  "keywords": [
+    "odata"
+  ],
+  "author": "Brian Heise",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toadslop/odata-metaxml/issues"
+  },
+  "homepage": "https://github.com/toadslop/odata-metaxml#readme",
+  "dependencies": {
+    "db-migrate": "^0.11.11",
+    "db-migrate-pg": "^1.2.2",
+    "pg": "~8.2.1"
+  }
+}
